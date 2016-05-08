@@ -1,0 +1,21 @@
+postgres:
+  image: colonyamerican/postgres
+  ports:
+    - "5595:5432"
+  volumes_from:
+    - pgdata
+  environment:
+    POSTGRES_USER: db
+    POSTGRES_PASS: db
+    POSTGRES_DB: db
+
+pgdata:
+  image: busybox
+  volumes:
+    - /data
+
+rabbitmq:
+  image: rabbitmq:3.5-management
+  ports:
+    - "5672:5672"
+    - "15672:15672"

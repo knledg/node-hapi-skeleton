@@ -1,0 +1,11 @@
+{
+  "verbose": true,
+  "ignore": [
+    ".git/*",
+    "node_modules/*",
+    "migrations/*"
+  ],
+  "env": {
+    "NODEMON": "1"
+  }
+}
