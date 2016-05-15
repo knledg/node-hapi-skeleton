@@ -33,6 +33,7 @@ export default [
       }
     },
     config: {
+      auth: 'token',
       pre: [ onlyOnDevelop ],
       description: 'Seed Database',
       notes: 'Seed your database with sample data',
