@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import Hapi from 'hapi';
 import path from 'path';
-import fs from 'fs';
 import glob from 'glob';
 import Pack from 'package.json';
 
@@ -11,6 +10,41 @@ function versionRoutes(version, routes) {
   return _.map(routes, (route) => {
     route.path = `/${version}${route.path}`;
     return route;
+  });
+}
+
+function registerPlugins(server) {
+  let plugins = [];
+  plugins.push(...glob.sync(path.join(__dirname, 'plugins', '*.js')));
+  plugins.forEach((plugin) => {
+    require(plugin)(server);
+  });
+}
+
+function registerRoutes(server) {
+  server.route(require(path.join(__dirname, 'routes/index.js')));
+
+  let folders = [];
+  folders.push(...glob.sync(path.join(__dirname, 'routes/v*')));
+  folders.forEach((folder) => {
+    const version = folder.split('/').pop();
+    let files = [];
+
+    files.push(...glob.sync(path.join(folder, '*.js')));
+    files.forEach((file) => {
+      let routes = require(file);
+      server.route(versionRoutes(version, routes));
+    });
+  });
+}
+
+function registerAuthStrategy(server) {
+  server.auth.strategy('token', 'jwt', {
+    key: new Buffer(process.env.AUTH0_CLIENT_SECRET, 'base64'),
+    verifyOptions: {
+      algorithms: [ 'HS256' ],
+      audience: process.env.AUTH0_CLIENT_ID,
+    },
   });
 }
 
@@ -33,9 +67,9 @@ function instance() {
     port,
     routes: {
       cors: {
-        origin: [ '*' ],
-        additionalHeaders: [ 'Range' ],
-        additionalExposedHeaders: [ 'Content-Range' ],
+        origin: ['*'],
+        exposedHeaders: ['Access-Control-Allow-Origin'],
+        headers: ['Accept', 'Authorization', 'Content-Type', 'If-None-Match', 'Accept-language'],
       },
       payload: {
         // Max payload of 5MB
@@ -63,30 +97,15 @@ function instance() {
       'register': require('hapi-swagger'),
       'options': swaggerOpts,
     },
+    require('hapi-auth-jwt'),
   ], function(err) {
     if (err) {
       throw err;
     }
-  });
 
-  let plugins = fs.readdirSync(path.join(__dirname, 'plugins'));
-  plugins.forEach(function(plugin) {
-    require(path.join(__dirname, 'plugins', plugin))(server);
-  });
-
-  server.route(require(path.join(__dirname, 'routes/index.js')));
-
-  let folders = [];
-  folders.push(...glob.sync(path.join(__dirname, 'routes/v*')));
-  folders.forEach((folder) => {
-    const version = folder.split('/').pop();
-    let files = [];
-
-    files.push(...glob.sync(path.join(folder, '*.js')));
-    files.forEach((file) => {
-      let routes = require(file);
-      server.route(versionRoutes(version, routes));
-    });
+    registerAuthStrategy(server);
+    registerPlugins(server);
+    registerRoutes(server);
   });
 
   return server;

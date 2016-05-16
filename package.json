@@ -28,6 +28,7 @@
     "googlemaps": "^1.4.0",
     "hapi": "^13.2.1",
     "hapi-auth-cookie": "^6.1.1",
+    "hapi-auth-jwt": "^4.0.0",
     "hapi-require-https": "^2.0.5",
     "hapi-swagger": "^5.0.1",
     "heretic": "^0.2.2",
