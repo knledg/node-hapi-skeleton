@@ -103,6 +103,14 @@ export const Base = bookshelf.Model.extend({
 
   execSearch() {
     this.searchHandler(this.filters);
+
+    if (this.offset) {
+      this.query('offset', this.offset);
+    }
+    if (this.limit) {
+      this.query('limit', this.limit);
+    }
+
     return this.fetchAll
       .call(this, {withRelated: this.withRelated})
       .then((collection) => collection.models);
