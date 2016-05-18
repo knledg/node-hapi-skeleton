@@ -13,7 +13,7 @@ function versionRoutes(version, routes) {
   });
 }
 
-function registerPlugins(server) {
+function registerPlugins() {
   let plugins = [];
   plugins.push(...glob.sync(path.join(__dirname, 'plugins', '*.js')));
   plugins.forEach((plugin) => {
@@ -21,7 +21,7 @@ function registerPlugins(server) {
   });
 }
 
-function registerRoutes(server) {
+function registerRoutes() {
   server.route(require(path.join(__dirname, 'routes/index.js')));
 
   let folders = [];
@@ -38,7 +38,7 @@ function registerRoutes(server) {
   });
 }
 
-function registerAuthStrategy(server) {
+function registerAuthStrategy() {
   server.auth.strategy('token', 'jwt', {
     key: new Buffer(process.env.AUTH0_CLIENT_SECRET, 'base64'),
     verifyOptions: {

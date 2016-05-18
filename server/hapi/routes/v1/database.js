@@ -11,7 +11,7 @@ import path from 'path';
 import {knex} from 'server/lib/knex';
 
 // Pre
-import {onlyOnDevelop} from 'server/hapi/pre/only-on-develop';
+import {onlyOnDevelop, requireJWTAuth} from 'server/hapi/pre';
 
 export default [
   {
@@ -33,7 +33,7 @@ export default [
       }
     },
     config: {
-      auth: 'token',
+      auth: requireJWTAuth,
       pre: [ onlyOnDevelop ],
       description: 'Seed Database',
       notes: 'Seed your database with sample data',

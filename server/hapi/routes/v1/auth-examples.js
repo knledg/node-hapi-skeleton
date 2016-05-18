@@ -1,4 +1,5 @@
 
+import {requireJWTToken} from 'server/hapi/pre';
 
 export default [
   {
@@ -11,7 +12,7 @@ export default [
       });
     },
     config: {
-      auth: 'token',
+      auth: requireJWTToken,
       notes: 'Demonstrate sample private endpoint',
       tags: ['api', 'auth'],
     },
