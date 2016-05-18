@@ -69,7 +69,7 @@ export const Base = bookshelf.Model.extend({
     if (filters.orderByDirection) {
       this.orderByDirection = filters.orderByDirection;
     } else if (filters.orderBy && ! filters.orderByDirection) {
-      filters.orderByDirection = 'DESC'; // usually want the newest first
+      this.orderByDirection = 'DESC'; // usually want the newest first
     }
 
     return this;
