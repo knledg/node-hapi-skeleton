@@ -1,6 +1,6 @@
 import {errorHandler} from 'server/lib/error-handler';
 
-export default function register(server) {
+export default function(server) {
   if (! process.env.ROLLBAR_TOKEN) {
     return;
   }

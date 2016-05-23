@@ -3,9 +3,8 @@
 /* This script loads all the command scripts in /commands and will run a specific command based on command line input */
 /* eslint-disable no-console, strict, no-process-exit */
 'use strict';
-require('babel/register')({stage: 0});
-require('server/bootstrap/rollbar');
-require('server/bootstrap/bookshelf');
+require('babel-register');
+require('server/bootstrap');
 
 let glob = require('glob');
 let path = require('path');

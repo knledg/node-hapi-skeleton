@@ -1,6 +1,8 @@
 /* eslint-disable strict, no-process-exit, no-console */
 'use strict';
 
+require('babel-register');
+
 try {
   require('assert-env')([
     'PORT', 'NODE_ENV', 'NODE_PATH', 'AMQP_URL', 'DATABASE_URL',
@@ -12,11 +14,9 @@ try {
   process.exit(1);
 }
 
-
-require('babel/register')({stage: 0});
 require('server/bootstrap');
 
-const heretic = require('server/lib/heretic');
+const heretic = require('server/lib/heretic').default;
 
 // heretic.process('your-worker', 1, require('server/workers/your-worker'));
 
