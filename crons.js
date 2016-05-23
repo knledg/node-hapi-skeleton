@@ -4,7 +4,7 @@
 /* eslint-disable no-console, strict, no-process-exit */
 'use strict';
 
-require('babel/register')({stage: 0});
+require('babel-register');
 
 try {
   require('assert-env')([ 'NODE_PATH', 'NODE_ENV', 'DATABASE_URL', 'APP_NAME', 'AMQP_URL' ]);

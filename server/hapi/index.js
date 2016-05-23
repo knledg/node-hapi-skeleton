@@ -17,12 +17,12 @@ function registerPlugins() {
   let plugins = [];
   plugins.push(...glob.sync(path.join(__dirname, 'plugins', '*.js')));
   plugins.forEach((plugin) => {
-    require(plugin)(server);
+    require(plugin).default(server);
   });
 }
 
 function registerRoutes() {
-  server.route(require(path.join(__dirname, 'routes/index.js')));
+  server.route(require(path.join(__dirname, 'routes/index.js')).default);
 
   let folders = [];
   folders.push(...glob.sync(path.join(__dirname, 'routes/v*')));
@@ -32,7 +32,7 @@ function registerRoutes() {
 
     files.push(...glob.sync(path.join(folder, '*.js')));
     files.forEach((file) => {
-      let routes = require(file);
+      let routes = require(file).default;
       server.route(versionRoutes(version, routes));
     });
   });
