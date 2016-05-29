@@ -29,7 +29,7 @@ import {property} from 'lodash';
  *     }
  *   });
  */
-export const searchFactory = function searchFactory(Model, getFilters = property('query'), withRelated = []) {
+export function searchFactory(Model, getFilters = property('query'), withRelated = []) {
   return function(request, reply) {
     return new Model()
       .search(getFilters(request), withRelated)

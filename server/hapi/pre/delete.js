@@ -28,7 +28,7 @@ import {property, includes} from 'lodash';
  *     }
  *   });
  */
-export const deleteFactory = function deleteFactory(Model, getRecord = property('pre.result')) {
+export function deleteFactory(Model, getRecord = property('pre.result')) {
   return function(request, reply) {
     const usesSoftDeletes = includes(Model.prototype.hasTimestamps, 'deleted_at');
     const record = getRecord(request);

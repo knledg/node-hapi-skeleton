@@ -30,7 +30,7 @@ const DEFAULT_OPTIONS = {
  *     }
  *   });
  */
-export const fetchFactory = function fetchFactory(Model, getId = property('params.id'), fetchOptions = DEFAULT_OPTIONS) {
+export function fetchFactory(Model, getId = property('params.id'), fetchOptions = DEFAULT_OPTIONS) {
   return function(request, reply) {
     return new Model({id: getId(request)})
       .fetch(fetchOptions)

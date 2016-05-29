@@ -30,7 +30,7 @@ import Boom from 'boom';
  *     }
  *   });
  */
-export const upsertFactory = function upsertFactory(Model, getPayload = property('payload')) {
+export function upsertFactory(Model, getPayload = property('payload')) {
   return function(request, reply) {
     const payload = getPayload(request);
     let promise;

@@ -6,8 +6,6 @@ require('babel-register');
 try {
   require('assert-env')([
     'PORT', 'NODE_ENV', 'NODE_PATH', 'AMQP_URL', 'DATABASE_URL',
-    'GOOGLE_PRIVATE_KEY', 'GOOGLE_CLIENT_ID', 'GOOGLE_USE_SECURE_CONNECTION',
-    'GOOGLE_SERVER_KEY', 'CLOUDINARY_URL',
   ]);
 } catch (err) {
   console.error(err.message.substr(0, err.message.length - 1));
