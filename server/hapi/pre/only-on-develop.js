@@ -5,4 +5,4 @@ export function onlyOnDevelop(request, reply) {
     return reply(Boom.notFound());
   }
   return reply();
-};
+}

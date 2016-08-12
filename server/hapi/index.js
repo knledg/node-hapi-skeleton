@@ -4,6 +4,9 @@ import path from 'path';
 import glob from 'glob';
 import Pack from 'package.json';
 
+import GraphQL from 'hapi-graphql';
+import {schema} from 'server/graphql';
+
 let server;
 
 function versionRoutes(version, routes) {
@@ -78,27 +81,55 @@ function instance() {
     },
   });
 
-  const swaggerOpts = {
-    info: {
-      title: process.env.APP_NAME,
-      version: Pack.version,
-    },
-    tags: [{
-      'name': 'database',
-      'description': 'Database Manipulation',
-    }], // tags to group by
-  };
-
-  server.register([
-    // require('hapi-require-https'),
+  let hapiPlugins = [
     require('inert'),
     require('vision'),
-    {
-      'register': require('hapi-swagger'),
-      'options': swaggerOpts,
-    },
     require('hapi-auth-jwt'),
-  ], function(err) {
+    {
+      register: GraphQL,
+      options: {
+        query: {
+          schema,
+          graphiql: true,
+        },
+        route: {
+          path: '/graphql',
+          config: {
+          },
+        },
+      },
+    },
+  ];
+
+  // Add swagger if not on prod
+  if (process.env.NODE_ENV === 'development') {
+    hapiPlugins.push({
+      'register': require('hapi-swagger'),
+      'options': {
+        info: {
+          title: process.env.APP_NAME,
+          version: Pack.version,
+        },
+        sortEndpoints: 'path',
+        sortTags: 'name',
+        expanded: 'none',
+        pathPrefixSize: 2,
+        tags: [{
+          'name': 'database',
+          'description': 'Database Manipulation',
+        }], // tags to group by
+      },
+    });
+  }
+
+  if (process.env.NODE_ENV !== 'development') {
+    hapiPlugins.unshift({
+      'register': require('hapi-require-https'),
+      'options': {},
+    });
+  }
+
+  server.register(hapiPlugins, function(err) {
     if (err) {
       throw err;
     }

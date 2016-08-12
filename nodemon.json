@@ -3,7 +3,8 @@
   "ignore": [
     ".git/*",
     "node_modules/*",
-    "migrations/*"
+    "migrations/*",
+    "client/*"
   ],
   "env": {
     "NODEMON": "1"

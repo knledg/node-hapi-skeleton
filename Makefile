@@ -1,6 +1,5 @@
 ESLINT = node_modules/.bin/eslint
 MARINER = node_modules/.bin/mariner
-AVA = node_modules/.bin/ava
 
 .PHONY: web lint crons test watch-tests
 
@@ -27,9 +26,6 @@ migrate:
 
 rollback:
 	nf run $(MARINER) migrate down
-
-test:
-	nf run $(AVA)
 
 # Continuously run tests in the background, useful when writing the tests
 watch-tests:

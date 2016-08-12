@@ -1,14 +1,10 @@
-/*
-  Error Handler - Handles Hapi Uncaught Exceptions or TError and sends them to Rollbar for analysis
-*/
-
 import {includes, isString, assign, noop} from 'lodash';
 import rollbar from 'rollbar';
 
 /* eslint-disable max-statements */
 class ErrorHandler {
 
-  IGNORED_ERRORS = [ 'ECONNRESET', 'write after end' ];
+  IGNORED_ERRORS = [ 'ECONNRESET', 'write after end', 'socket hang up' ];
 
   // Patch the raw request to work with rollbar's assumptions (which are based on express)
   rollbarRequest(request) {
@@ -32,13 +28,13 @@ class ErrorHandler {
   /**
    * [hapiError - comes from server.on('log') with the tag error ]
    * @param  {object} error
-   * @param  {array} tags
+   * @param  {object} tags
    */
   hapiError(error, tags) {
     if (error instanceof TError) {
       return this.terror(error, {tags});
     } else if (error instanceof Error) {
-      if (tags.connection && tags.client && includes(this.IGNORED_ERRORS, error.code)) {
+      if (tags && tags.connection && tags.client && includes(this.IGNORED_ERRORS, error.code)) {
         return null;
       }
 
@@ -53,7 +49,7 @@ class ErrorHandler {
   /**
    * [hapiError - comes from server.on('request')]
    * @param  {object} error
-   * @param  {array} tags
+   * @param  {object} tags
    */
   hapiRequest(request, error, tags) {
     if (error instanceof TError) {
@@ -133,6 +129,9 @@ class ErrorHandler {
       params: request.params,
     };
 
+    if (err.message && includes(this.IGNORED_ERRORS, err.message.replace('Uncaught error: ', ''))) {
+      return null;
+    }
     return rollbar.handleErrorWithPayloadData(err, payload, this.rollbarRequest(request));
   }
 
