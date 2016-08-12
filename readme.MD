@@ -31,7 +31,6 @@ The framework is setup to run three processes: web, crons, and workers.
 ## Database
 
 - Utilizes [Mariner](https://github.com/bjyoungblood/mariner) to easily create database migrations using raw SQL statements instead of from a module.
-- Utilizes [Bookshelf](http://bookshelfjs.org/) for models to easily establish relationships between your database tables
 - Utilizes [Knex](http://knexjs.org/) to handle your more robust queries
 - Pre-built `Hapi Pre` functions to handle the bulk of your standard REST database queries automatically.
   - Fetch
