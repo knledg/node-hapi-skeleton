@@ -2,6 +2,7 @@
 'use strict';
 
 require('babel-register');
+global.TError = require('server/lib/terror').default;
 
 try {
   require('assert-env')([

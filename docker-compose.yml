@@ -6,7 +6,7 @@ postgres:
     - pgdata
   environment:
     POSTGRES_USER: db
-    POSTGRES_PASS: db
+    POSTGRES_PASSWORD: db
     POSTGRES_DB: db
 
 pgdata:
