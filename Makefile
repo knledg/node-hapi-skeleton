@@ -26,7 +26,3 @@ migrate:
 
 rollback:
 	nf run $(MARINER) migrate down
-
-# Continuously run tests in the background, useful when writing the tests
-watch-tests:
-	nf run $(AVA) -- --watch
